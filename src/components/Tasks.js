@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Cell, PanelHeader } from '@vkontakte/vkui'
+import { List, Cell, PanelHeader, platform, ANDROID } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 
 class Tasks extends React.Component {
@@ -8,28 +8,31 @@ class Tasks extends React.Component {
 
         let {
             tasks,
-            router
+            router,
+            setCurrentTaskId
         } = this.props
 
+        const osname = platform()
 
 		return (
 			<div>
                 <PanelHeader>
                     Задачи
                 </PanelHeader>
-                <List style={{ paddingTop : 60 }}>
+                <List style={{ paddingTop : (osname === ANDROID) ? 56 : 48 }}>
                     {
                         tasks.map((task, index) => (
                             <Cell
                                 multiline
                                 expandable
                                 key={index}
-                                onClick={()=>router.navigate('task', { id : task.id })}
+                                onClick={()=> {
+                                        setCurrentTaskId(task.id)
+                                        router.navigate('task', { id : task.id })
+                                    } 
+                                }
                             >
-                                <b>{task.name}</b>
-                                <p>
-                                    {task.text}
-                                </p>
+                                {task.name}
                             </Cell>
                         ))
                     }

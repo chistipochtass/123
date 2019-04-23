@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Panel, Search, FixedLayout, Div, Button } from '@vkontakte/vkui'
+import { View, Panel, Search, FixedLayout, Div, Button, platform, ANDROID } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
@@ -18,20 +18,21 @@ class App extends React.Component {
 			tasks : [ 
 				{	
 					id : 1,
-					name : 'Hello world',
-					text : 'First tasks'
+					name : 'Домашнее задание',
+					text : 'Сделать математику к школе'
 				},
 				{
 					id : 2,
-					name : 'Hello world',
-					text : 'First tasks'
+					name : 'Выпить воду',
+					text : 'Буду пить воду каждый час'
 				},
 				{
 					id : 3,
-					name : 'Hello world',
-					text : 'First tasks'
+					name : 'Написать Васе',
+					text : 'Надо написать Васе, чтобы он написал Свете'
 				}
 			],
+			currentTaskId : null,
 			search : ''
 		}
 	}
@@ -46,6 +47,8 @@ class App extends React.Component {
 			tasks : [...this.state.tasks, task]
 		})
 	}
+
+	setCurrentTaskId = (currentTaskId) => this.setState({ currentTaskId })
 
 	editTask = (newTask) => {
 		let newTasks = this.state.tasks.map((task) => {
@@ -67,8 +70,7 @@ class App extends React.Component {
 	}
 
 	get task () {
-		const id = Number(this.props.route.params.id)
-		console.log(id)
+		const id = Number(this.props.route.params.id) || this.state.currentTaskId
 		return this.state.tasks.filter((task) =>
 			task.id === id
 		)
@@ -80,6 +82,7 @@ class App extends React.Component {
 			router
 		} = this.props
 
+		const osname = platform()
 		const activePanel = route.name
 
 		return (
@@ -91,16 +94,30 @@ class App extends React.Component {
 					<Tasks 
 						router={router}
 						tasks={this.tasks}
+						setCurrentTaskId={this.setCurrentTaskId}
 					/>
 					<FixedLayout vertical='bottom'>
-						<Div style={{ float : 'right' }}>
-							<Button
-								className='FixedBottomButton'
-								onClick={()=>router.navigate('add')}
-							>
-								<Icon24Add/>
-							</Button>
-						</Div>
+						{
+							osname === ANDROID ?
+							<Div style={{ float : 'right' }}>
+								<Button
+									className='FixedBottomButton'
+									onClick={()=>router.navigate('add')}
+								>
+									<Icon24Add/>
+								</Button>
+							</Div>
+							:
+							<Div>
+								<Button
+									size="xl"
+									onClick={()=>router.navigate('add')}
+								>
+									Новая задача
+								</Button>
+							</Div>
+						}
+						
 					</FixedLayout>
 				</Panel>
 
@@ -110,14 +127,26 @@ class App extends React.Component {
 						task={this.task[0]}
 					/>
 					<FixedLayout vertical='bottom'>
-						<Div style={{ float : 'right' }}>
-							<Button
-								className='FixedBottomButton'
-								onClick={()=>router.navigate('edit', { id : this.task[0].id })}
-							>
-								<Icon24Write/>
-							</Button>
-						</Div>
+						{
+							osname === ANDROID ?
+							<Div style={{ float : 'right' }}>
+								<Button
+									className='FixedBottomButton'
+									onClick={()=>router.navigate('edit', { id : this.task[0].id })}
+								>
+									<Icon24Write/>
+								</Button>
+							</Div>
+							:
+							<Div>
+								<Button
+									size="xl"
+									onClick={()=>router.navigate('edit', { id : this.task[0].id })}
+								>
+									Редактировать
+								</Button>
+							</Div>
+						}
 					</FixedLayout>
 				</Panel>
 
