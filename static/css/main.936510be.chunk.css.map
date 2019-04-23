@@ -1,1 +1,0 @@
-{"version":3,"sources":["custom.css"],"names":[],"mappings":"AAAA,mBACI,4BAA8B,CAC9B,UAAW,CACX,WACJ,CAEA,EACI,oBAAqB,CACrB,aACJ","file":"main.936510be.chunk.css","sourcesContent":[".FixedBottomButton {\n    border-radius: 25px !important;\n    width: 48px;\n    height: 48px;\n}\n\na {\n    text-decoration: none;\n    color: inherit;\n}"]}
