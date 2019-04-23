@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Panel, Search, FixedLayout, Div, Button, platform, ANDROID } from '@vkontakte/vkui'
+import { View, Panel, Search, FixedLayout, Div, Button, platform, ANDROID, Root } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
@@ -83,88 +83,92 @@ class App extends React.Component {
 		} = this.props
 
 		const osname = platform()
+		const activeView = (route.name === 'add') ? 'addView' : 'tasksView'
 		const activePanel = route.name
 
 		return (
-			<View activePanel={activePanel}>
-				<Panel id='tasks'>
-					<FixedLayout vertical='top'>
-						<Search value={this.state.search} onChange={this.onChangeSearch}/>
-					</FixedLayout>
-					<Tasks 
-						router={router}
-						tasks={this.tasks}
-						setCurrentTaskId={this.setCurrentTaskId}
-					/>
-					<FixedLayout vertical='bottom'>
-						{
-							osname === ANDROID ?
-							<Div style={{ float : 'right' }}>
-								<Button
-									className='FixedBottomButton'
-									onClick={()=>router.navigate('add')}
-								>
-									<Icon24Add/>
-								</Button>
-							</Div>
-							:
-							<Div>
-								<Button
-									size="xl"
-									onClick={()=>router.navigate('add')}
-								>
-									Новая задача
-								</Button>
-							</Div>
-						}
-						
-					</FixedLayout>
-				</Panel>
+			<Root activeView={activeView}>
+				<View activePanel={activePanel} id='tasksView'>
+					<Panel id='tasks'>
+						<FixedLayout vertical='top'>
+							<Search value={this.state.search} onChange={this.onChangeSearch}/>
+						</FixedLayout>
+						<Tasks 
+							router={router}
+							tasks={this.tasks}
+							setCurrentTaskId={this.setCurrentTaskId}
+						/>
+						<FixedLayout vertical='bottom'>
+							{
+								osname === ANDROID ?
+								<Div style={{ float : 'right' }}>
+									<Button
+										className='FixedBottomButton'
+										onClick={()=>router.navigate('add')}
+									>
+										<Icon24Add/>
+									</Button>
+								</Div>
+								:
+								<Div>
+									<Button
+										size="xl"
+										onClick={()=>router.navigate('add')}
+									>
+										Новая задача
+									</Button>
+								</Div>
+							}
+							
+						</FixedLayout>
+					</Panel>
 
-				<Panel id='task'>
-					<Task 
-						router={router}
-						task={this.task[0]}
-					/>
-					<FixedLayout vertical='bottom'>
-						{
-							osname === ANDROID ?
-							<Div style={{ float : 'right' }}>
-								<Button
-									className='FixedBottomButton'
-									onClick={()=>router.navigate('edit', { id : this.task[0].id })}
-								>
-									<Icon24Write/>
-								</Button>
-							</Div>
-							:
-							<Div>
-								<Button
-									size="xl"
-									onClick={()=>router.navigate('edit', { id : this.task[0].id })}
-								>
-									Редактировать
-								</Button>
-							</Div>
-						}
-					</FixedLayout>
-				</Panel>
+					<Panel id='task'>
+						<Task 
+							router={router}
+							task={this.task[0]}
+						/>
+						<FixedLayout vertical='bottom'>
+							{
+								osname === ANDROID ?
+								<Div style={{ float : 'right' }}>
+									<Button
+										className='FixedBottomButton'
+										onClick={()=>router.navigate('edit', { id : this.task[0].id })}
+									>
+										<Icon24Write/>
+									</Button>
+								</Div>
+								:
+								<Div>
+									<Button
+										size="xl"
+										onClick={()=>router.navigate('edit', { id : this.task[0].id })}
+									>
+										Редактировать
+									</Button>
+								</Div>
+							}
+						</FixedLayout>
+					</Panel>
 
-				<Panel id='add' theme="white">
-					<AddTask 
-						router={router}
-						addTask={this.addTask}
-					/>
-				</Panel>
-
-				<Panel id="edit" theme="white">
-					<EditTask 
-						router={router}
-						task={this.task[0]}
-						editTask={this.editTask}
-					/>
-				</Panel>
-			</View>
+					<Panel id="edit" theme="white">
+						<EditTask 
+							router={router}
+							task={this.task[0]}
+							editTask={this.editTask}
+						/>
+					</Panel>
+				</View>
+				<View activePanel={activePanel} id='addView'>
+					<Panel id='add' theme="white">
+							<AddTask 
+								router={router}
+								addTask={this.addTask}
+							/>
+					</Panel>
+				</View>
+			</Root>
 		)
 	}
 }
