@@ -1,19 +1,19 @@
 import React from 'react'
 import { PanelHeader, Header, Div, Group } from '@vkontakte/vkui'
 import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack'
-import { Link } from 'react-router5'
 
 function Task(props) {	
+	
 	const task = props.task
+	const router = props.router
+
 	return (
 		<div>
            <PanelHeader
 				left={
-					<Link
-						routeName={'tasks'}
-					>
-						<PanelHeaderBack/>
-					</Link>
+					<PanelHeaderBack
+						onClick={()=>router.navigate('tasks')}
+					/>
 				}
 			>
             Задача

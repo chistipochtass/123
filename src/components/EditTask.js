@@ -3,7 +3,6 @@ import { PanelHeader, FormLayout, Textarea, Input, FixedLayout, Button, Div } fr
 import '@vkontakte/vkui/dist/vkui.css'
 import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack'
 import Icon24Done from '@vkontakte/icons/dist/24/done'
-import { Link } from 'react-router5'
 
 class EditTask extends React.Component {
 
@@ -59,7 +58,8 @@ class EditTask extends React.Component {
 	render() {
 
 		let {
-			task
+			task,
+			router
 		} = this.props
 
 		return (
@@ -69,12 +69,9 @@ class EditTask extends React.Component {
 					<div>
 						<PanelHeader
 							left={
-								<Link
-									routeName={'task'}
-									routeParams={{id : task.id}}
-								>
-									<PanelHeaderBack />
-								</Link>
+								<PanelHeaderBack 
+									onClick={()=>router.navigate('task', { id : task.id })}
+								/>
 							}
 						>
 						Редактирование

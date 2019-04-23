@@ -7,7 +7,7 @@ import Task from './components/Task'
 import EditTask from './components/EditTask'
 import Icon24Add from '@vkontakte/icons/dist/24/add'
 import Icon24Write from '@vkontakte/icons/dist/24/write'
-import { RouteNode, Link } from 'react-router5'
+import { RouteNode } from 'react-router5'
 import './custom.css'
 
 class App extends React.Component {
@@ -68,6 +68,7 @@ class App extends React.Component {
 
 	get task () {
 		const id = Number(this.props.route.params.id)
+		console.log(id)
 		return this.state.tasks.filter((task) =>
 			task.id === id
 		)
@@ -88,37 +89,34 @@ class App extends React.Component {
 						<Search value={this.state.search} onChange={this.onChangeSearch}/>
 					</FixedLayout>
 					<Tasks 
+						router={router}
 						tasks={this.tasks}
 					/>
 					<FixedLayout vertical='bottom'>
 						<Div style={{ float : 'right' }}>
-							<Link
-								routeName={'add'}
+							<Button
+								className='FixedBottomButton'
+								onClick={()=>router.navigate('add')}
 							>
-								<Button
-									className='FixedBottomButton'
-								>
-									<Icon24Add/>
-								</Button>
-							</Link>
+								<Icon24Add/>
+							</Button>
 						</Div>
 					</FixedLayout>
 				</Panel>
 
 				<Panel id='task'>
-					<Task task={this.task[0]}/>
+					<Task 
+						router={router}
+						task={this.task[0]}
+					/>
 					<FixedLayout vertical='bottom'>
 						<Div style={{ float : 'right' }}>
-							<Link
-								routeName={'edit'}
-								routeParams={{id : (typeof this.task[0] !== 'undefined') ? this.task[0].id : 0}}
+							<Button
+								className='FixedBottomButton'
+								onClick={()=>router.navigate('edit', { id : this.task[0].id })}
 							>
-								<Button
-									className='FixedBottomButton'
-								>
-									<Icon24Write/>
-								</Button>
-							</Link>
+								<Icon24Write/>
+							</Button>
 						</Div>
 					</FixedLayout>
 				</Panel>

@@ -3,7 +3,6 @@ import { PanelHeader, FormLayout, Textarea, Input, FixedLayout, Button, Div } fr
 import '@vkontakte/vkui/dist/vkui.css'
 import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack'
 import Icon24Done from '@vkontakte/icons/dist/24/done'
-import { Link } from 'react-router5'
 
 class AddTask extends React.Component {
 
@@ -47,15 +46,18 @@ class AddTask extends React.Component {
 	}
 
 	render() {
+
+		let {
+			router
+		} = this.props
+
 		return (
 			<div>
                 <PanelHeader
 					left={
-						<Link
-							routeName={'tasks'}
-						>
-							<PanelHeaderBack/>
-						</Link>
+						<PanelHeaderBack
+							onClick={()=>router.navigate('tasks')}
+						/>
 					}
 				>
                 Добавление
