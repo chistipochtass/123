@@ -1,22 +1,48 @@
 import React from 'react'
-import { List, Cell, PanelHeader, platform, ANDROID } from '@vkontakte/vkui'
+import { List, Cell, PanelHeader, platform, ANDROID, HeaderButton } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
+import Icon24Delete from '@vkontakte/icons/dist/24/delete'
 
 class Tasks extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            removable : false
+        }
+    }
+
+    onRemovableTasks = () => {
+        this.setState({ removable : !this.state.removable })
+    }
 
 	render() {
 
         let {
             tasks,
             router,
-            setCurrentTaskId
+            setCurrentTaskId,
+            deleteTask
         } = this.props
+
+        let {
+            removable
+        } = this.state
 
         const osname = platform()
 
 		return (
 			<div>
-                <PanelHeader>
+                <PanelHeader
+                    left={
+                        <HeaderButton 
+                            onClick={() => this.onRemovableTasks()}
+                        >
+                            <Icon24Delete/>
+                        </HeaderButton>
+                    }
+                >
                     Задачи
                 </PanelHeader>
                 <List style={{ paddingTop : (osname === ANDROID) ? 56 : 48 }}>
@@ -25,7 +51,9 @@ class Tasks extends React.Component {
                             <Cell
                                 multiline
                                 expandable
+                                removable={removable}
                                 key={index}
+                                onRemove={() => deleteTask(task.id)}
                                 onClick={()=> {
                                         setCurrentTaskId(task.id)
                                         router.navigate('task', { id : task.id })

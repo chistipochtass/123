@@ -40,11 +40,18 @@ class App extends React.Component {
 	onChangeSearch = (search) => { 
 		this.setState({ search })
 	}
-
+	
 	addTask = (task) => {
 		task.id = this.state.tasks.length + 1
 		this.setState({
 			tasks : [...this.state.tasks, task]
+		})
+	}
+
+	deleteTask = (id) => {
+		let newTasks = this.state.tasks.filter((task) => task.id !== id)
+		this.setState({ 
+			tasks : newTasks
 		})
 	}
 
@@ -97,6 +104,7 @@ class App extends React.Component {
 							router={router}
 							tasks={this.tasks}
 							setCurrentTaskId={this.setCurrentTaskId}
+							deleteTask={this.deleteTask}
 						/>
 						<FixedLayout vertical='bottom'>
 							{
