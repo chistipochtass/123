@@ -4,31 +4,16 @@ import '@vkontakte/vkui/dist/vkui.css'
 import Icon24Delete from '@vkontakte/icons/dist/24/delete'
 
 class Tasks extends React.Component {
-
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            removable : false
-        }
-    }
-
-    onRemovableTasks = () => {
-        this.setState({ removable : !this.state.removable })
-    }
-
 	render() {
 
         let {
             tasks,
             router,
             setCurrentTaskId,
-            deleteTask
-        } = this.props
-
-        let {
+            onRemovableTasks,
+            deleteTask,
             removable
-        } = this.state
+        } = this.props
 
         const osname = platform()
 
@@ -36,8 +21,11 @@ class Tasks extends React.Component {
 			<div>
                 <PanelHeader
                     left={
+                        osname === ANDROID ?
+                        false
+                        :
                         <HeaderButton 
-                            onClick={() => this.onRemovableTasks()}
+                            onClick={() => onRemovableTasks()}
                         >
                             <Icon24Delete/>
                         </HeaderButton>

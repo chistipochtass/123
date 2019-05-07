@@ -8,6 +8,7 @@ import EditTask from './components/EditTask'
 import Icon24Add from '@vkontakte/icons/dist/24/add'
 import Icon24Write from '@vkontakte/icons/dist/24/write'
 import { RouteNode } from 'react-router5'
+import Icon24Delete from '@vkontakte/icons/dist/24/delete'
 import './custom.css'
 
 class App extends React.Component {
@@ -33,7 +34,8 @@ class App extends React.Component {
 				}
 			],
 			currentTaskId : null,
-			search : ''
+			search : '',
+			removable : false
 		}
 	}
 
@@ -54,6 +56,8 @@ class App extends React.Component {
 			tasks : newTasks
 		})
 	}
+
+	onRemovableTasks = () => this.setState({ removable : !this.state.removable })
 
 	setCurrentTaskId = (currentTaskId) => this.setState({ currentTaskId })
 
@@ -103,6 +107,8 @@ class App extends React.Component {
 						<Tasks 
 							router={router}
 							tasks={this.tasks}
+							removable={this.state.removable}
+							onRemovableTasks={this.onRemovableTasks}
 							setCurrentTaskId={this.setCurrentTaskId}
 							deleteTask={this.deleteTask}
 						/>
@@ -127,7 +133,19 @@ class App extends React.Component {
 									</Button>
 								</Div>
 							}
-							
+							{
+								osname === ANDROID ? 
+								<Div>
+									<Button
+										className='FixedBottomButton'
+										onClick={() => this.onRemovableTasks()}
+									>
+										<Icon24Delete/>
+									</Button>
+								</Div>
+								:
+								false
+							}
 						</FixedLayout>
 					</Panel>
 
