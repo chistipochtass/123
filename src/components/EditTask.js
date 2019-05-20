@@ -3,6 +3,7 @@ import { PanelHeader, FormLayout, Textarea, Input, FixedLayout, Button, Div, pla
 import '@vkontakte/vkui/dist/vkui.css'
 import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack'
 import Icon24Done from '@vkontakte/icons/dist/24/done'
+import connect from 'storeon/react/connect'
 
 class EditTask extends React.Component {
 
@@ -18,16 +19,13 @@ class EditTask extends React.Component {
 	}
 
 	componentDidMount() {
-		let {
-			task
-		} = this.props
-
+		const tasks = this.props.tasks
+		const task = tasks.filter((task) => task.id === Number(this.props.route.params.id))[0]
 		this.setState({ ...task })
 	}
 
 	onClickEditTask = () => {
 		let {
-			editTask,
 			router
 		} = this.props
 
@@ -39,10 +37,9 @@ class EditTask extends React.Component {
 
 		if (name !== '' && text !== '') {
 			this.setState({ error : false })
-			editTask({
-				id, name, text
-			})
-			router.navigateToDefault()
+			const tasks = this.props.tasks
+			this.props.dispatch('tasks/edit', ({ tasks }, { id, name, text }))
+			router.navigate('task', { id : id })
         } else {
 			this.setState({ error : true })
 		}
@@ -62,71 +59,65 @@ class EditTask extends React.Component {
 	render() {
 
 		let {
-			task,
 			router
 		} = this.props
 
 		const osname = platform()
 
 		return (
-			<div>
-				{
-					typeof task !== 'undefined' &&
-					<div>
-						<PanelHeader
-							left={
-								<PanelHeaderBack 
-									onClick={()=>router.navigate('task', { id : task.id })}
-								/>
-							}
-						>
-						Редактирование
-						</PanelHeader>
-						<FormLayout>
-							{
-								this.state.error === true &&
-								<FormStatus title="Некорректные поля" state="error">
-									Заполните все поля
-								</FormStatus>
-							}
-							<Input 
-								onChange={this.onChangeNameTask}
-								type='text'
-								value={this.state.name}
-								placeholder='Напиши, как называется задача' 
+				<div>
+					<PanelHeader
+						left={
+							<PanelHeaderBack 
+								onClick={()=>router.navigate('task', { id : this.state.id })}
 							/>
-							<Textarea 
-								onChange={this.onChangeTextTask}
-								value={this.state.text}
-								placeholder='Напиши, чтобы ты хотел сделать' />
-						</FormLayout>
-						<FixedLayout vertical='bottom'>
-							{
-								osname === ANDROID ?
-								<Div style={{ float : 'right' }}>
-									<Button
-										className='FixedBottomButton'
-										onClick={() => this.onClickEditTask()}
-									>
-										<Icon24Done/>
-									</Button>
-								</Div>
-								:
-								<Div>
-									<Button
-										size='xl'
-										onClick={() => this.onClickEditTask()}
-									>
-										Сохранить
-									</Button>
-								</Div>
-							}
-						</FixedLayout>
-					</div>
-				}
-            </div>
+						}
+					>
+					Редактирование
+					</PanelHeader>
+					<FormLayout>
+						{
+							this.state.error === true &&
+							<FormStatus title="Некорректные поля" state="error">
+								Заполните все поля
+							</FormStatus>
+						}
+						<Input 
+							onChange={this.onChangeNameTask}
+							type='text'
+							value={this.state.name}
+							placeholder='Напиши, как называется задача' 
+						/>
+						<Textarea 
+							onChange={this.onChangeTextTask}
+							value={this.state.text}
+							placeholder='Напиши, чтобы ты хотел сделать' />
+					</FormLayout>
+					<FixedLayout vertical='bottom'>
+						{
+							osname === ANDROID ?
+							<Div style={{ float : 'right' }}>
+								<Button
+									className='FixedBottomButton'
+									onClick={() => this.onClickEditTask()}
+								>
+									<Icon24Done/>
+								</Button>
+							</Div>
+							:
+							<Div>
+								<Button
+									size='xl'
+									onClick={() => this.onClickEditTask()}
+								>
+									Сохранить
+								</Button>
+							</Div>
+						}
+					</FixedLayout>
+				</div>
 		);
 	}
 }
 
-export default EditTask;
+export default connect('tasks', EditTask)

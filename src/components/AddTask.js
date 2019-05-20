@@ -3,6 +3,7 @@ import { PanelHeader, FormLayout, Textarea, Input, FixedLayout, Button, Div, pla
 import '@vkontakte/vkui/dist/vkui.css'
 import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack'
 import Icon24Done from '@vkontakte/icons/dist/24/done'
+import connect from 'storeon/react/connect'
 
 class AddTask extends React.Component {
 
@@ -18,7 +19,6 @@ class AddTask extends React.Component {
 
 	onClickAddTask = () => {
 		let {
-			addTask,
 			router
 		} = this.props
 
@@ -29,9 +29,8 @@ class AddTask extends React.Component {
 
 		if (name !== '' && text !== '') {
 			this.setState({ error : false })
-			addTask({
-				name, text
-			})
+			const tasks = this.props.tasks
+			this.props.dispatch('tasks/add', ({ tasks }, { name, text }))
 			router.navigateToDefault()
 		} else {
 			this.setState({ error : true })
@@ -113,4 +112,4 @@ class AddTask extends React.Component {
 	}
 }
 
-export default AddTask;
+export default connect('tasks', AddTask)

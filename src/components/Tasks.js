@@ -2,19 +2,18 @@ import React from 'react'
 import { List, Cell, PanelHeader, platform, ANDROID, HeaderButton } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css'
 import Icon24Delete from '@vkontakte/icons/dist/24/delete'
+import useStoreon from 'storeon/react'
 
-class Tasks extends React.Component {
-	render() {
+const Tasks = (props) => {
 
         let {
-            tasks,
             router,
-            setCurrentTaskId,
             onRemovableTasks,
-            deleteTask,
             removable
-        } = this.props
+        } = props
 
+
+        const { dispatch, tasks } = useStoreon('tasks')
         const osname = platform()
 
 		return (
@@ -33,7 +32,7 @@ class Tasks extends React.Component {
                 >
                     Задачи
                 </PanelHeader>
-                <List style={{ paddingTop : (osname === ANDROID) ? 56 : 48 }}>
+                <List>
                     {
                         tasks.map((task, index) => (
                             <Cell
@@ -41,9 +40,8 @@ class Tasks extends React.Component {
                                 expandable
                                 removable={removable}
                                 key={index}
-                                onRemove={() => deleteTask(task.id)}
+                                onRemove={() => dispatch('tasks/delete', ({ tasks }, task.id))}
                                 onClick={()=> {
-                                        setCurrentTaskId(task.id)
                                         router.navigate('task', { id : task.id })
                                     } 
                                 }
@@ -55,7 +53,6 @@ class Tasks extends React.Component {
                 </List>
             </div>
 		);
-	}
 }
 
-export default Tasks;
+export default Tasks
