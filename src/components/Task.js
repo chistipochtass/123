@@ -1,10 +1,12 @@
 import React from 'react'
 import { PanelHeader, Header, Div, Group } from '@vkontakte/vkui'
 import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack'
+import useStoreon from 'storeon/react'
 
 function Task(props) {	
 	
-	const task = props.task
+	const { tasks } = useStoreon('tasks')
+	const task = tasks.filter((task) => task.id === Number(props.route.params.id))[0]
 	const router = props.router
 
 	return (
@@ -12,7 +14,7 @@ function Task(props) {
            <PanelHeader
 				left={
 					<PanelHeaderBack
-						onClick={()=>router.navigate('tasks')}
+						onClick={() => router.navigate('tasks')}
 					/>
 				}
 			>
